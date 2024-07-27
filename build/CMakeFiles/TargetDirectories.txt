@@ -1,0 +1,3 @@
+/home/root1/Public/vs/SkipList/build/CMakeFiles/rebuild_cache.dir
+/home/root1/Public/vs/SkipList/build/CMakeFiles/edit_cache.dir
+/home/root1/Public/vs/SkipList/build/CMakeFiles/main.dir

@@ -1,13 +1,12 @@
-#pragma once
 #include "skiplist.h"
-// SkipList构造函数，初始化跳表的最大层数、当前层数和虚拟头节点
-SkipList::SkipList(int maxLvl) : maxLevel(maxLvl), currentLevel(0)
+template <typename K, typename V>
+SkipList<K, V>::SkipList(int maxLvl) : maxLevel(maxLvl), currentLevel(0)
 {
-    head = new SkipListNode(INT_MIN, maxLevel);
+    head = new SkipListNode<K, V>(INT_MIN, V(), maxLevel);
 }
 
-// 随机生成节点的层数，用于插入新节点时确定其层数
-int SkipList::randomLevel()
+template <typename K, typename V>
+int SkipList<K, V>::randomLevel()
 {
     int lvl = 1;
     while ((rand() & 1) && lvl < maxLevel)
@@ -15,16 +14,16 @@ int SkipList::randomLevel()
     return lvl;
 }
 
-// 插入新节点到跳表中
-void SkipList::insert(int value)
+template <typename K, typename V>
+void SkipList<K, V>::insert(K key, V value)
 {
     int level = randomLevel();
-    SkipListNode *newNode = new SkipListNode(value, level);
+    SkipListNode<K, V> *newNode = new SkipListNode<K, V>(key, value, level);
 
-    SkipListNode *current = head;
+    SkipListNode<K, V> *current = head;
     for (int i = currentLevel; i >= 0; i--)
     {
-        while (current->next[i] != nullptr && current->next[i]->value < value)
+        while (current->next[i] != nullptr && current->next[i]->key < key)
             current = current->next[i];
         if (i <= level)
         {
@@ -35,47 +34,44 @@ void SkipList::insert(int value)
 
     if (level > currentLevel)
         currentLevel = level;
+
+    kvMap[key] = newNode;
 }
 
-// 在跳表中搜索给定值，存在返回true，否则返回false
-bool SkipList::search(int value)
+template <typename K, typename V>
+bool SkipList<K, V>::search(K key)
 {
-    SkipListNode *current = head;
-    for (int i = currentLevel; i >= 0; i--)
-    {
-        while (current->next[i] != nullptr && current->next[i]->value < value)
-            current = current->next[i];
-        if (current->next[i] != nullptr && current->next[i]->value == value)
-            return true;
-    }
-    return false;
+    if (kvMap.find(key) == kvMap.end())
+        return false;
+    
+    return true;
 }
 
-// 从跳表中删除给定值的节点
-void SkipList::remove(int value)
+template <typename K, typename V>
+void SkipList<K, V>::remove(K key)
 {
-    SkipListNode *current = head;
-    std::vector<SkipListNode *> toUpdate(maxLevel, nullptr);
+    if (kvMap.find(key) == kvMap.end())
+        return;
 
-    for (int i = currentLevel; i >= 0; i--)
+    SkipListNode<K, V> *nodeToRemove = kvMap[key];
+    
+    for (int i = 0; i <= currentLevel; i++)
     {
-        while (current->next[i] != nullptr && current->next[i]->value < value)
-            current = current->next[i];
-        toUpdate[i] = current;
-    }
-
-    if (current->next[0] != nullptr && current->next[0]->value == value)
-    {
-        SkipListNode *nodeToRemove = current->next[0];
-        for (int i = 0; i <= currentLevel; i++)
+        if (head->next[i] == nodeToRemove)
+            head->next[i] = nodeToRemove->next[i];
+        else 
         {
-            if (toUpdate[i]->next[i] != nodeToRemove)
-                break;
-            toUpdate[i]->next[i] = nodeToRemove->next[i];
+            SkipListNode<K,V>* current = head;
+            while(current != nullptr && current->next[i] != nodeToRemove)
+                current = current->next[i];
+            
+            if(current != nullptr)
+                current->next[i] = nodeToRemove->next[i];
         }
-        delete nodeToRemove;
-
-        while (currentLevel > 0 && head->next[currentLevel] == nullptr)
-            currentLevel--;
     }
+
+    delete nodeToRemove;
+
+    while (currentLevel > 0 && head->next[currentLevel] == nullptr)
+        currentLevel--;
 }

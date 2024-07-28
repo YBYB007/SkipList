@@ -9,20 +9,16 @@
 /home/root1/Public/vs/SkipList/main.cpp
 iostream
 -
-skiplist.cpp
-/home/root1/Public/vs/SkipList/skiplist.cpp
+skipList.cpp
+/home/root1/Public/vs/SkipList/skipList.cpp
 
-/home/root1/Public/vs/SkipList/skiplist.cpp
-skiplist.h
-/home/root1/Public/vs/SkipList/skiplist.h
+/home/root1/Public/vs/SkipList/skipList.cpp
+skipList.h
+/home/root1/Public/vs/SkipList/skipList.h
 
-/home/root1/Public/vs/SkipList/skiplist.h
+/home/root1/Public/vs/SkipList/skipList.h
 vector
 -
-climits
--
-stdlib.h
--
-unordered_map
+iostream
 -
 

@@ -1,16 +1,23 @@
 #include <iostream>
-#include "skiplist.cpp"
+#include "skipList.cpp"
+
 int main()
 {
-    SkipList<int, int> skipList(4);
-    skipList.insert(3, 30);
-    skipList.insert(6, 60);
-
-    std::cout << "Search 6: " << (skipList.search(6) ? "Found" : "Not Found") << std::endl;
-
-    skipList.remove(6);
-
-    std::cout << "Search 6 after removal: " << (skipList.search(6) ? "Found" : "Not Found") << std::endl;
-
+    Skiplist<int ,int> skiplist;
+    skiplist.add(12,21);
+    skiplist.add(12,21);
+    skiplist.add(-1,21);
+    skiplist.add(-3,21);
+    skiplist.add(-3,21);
+    skiplist.add(-3,21);
+    skiplist.add(-3,21);
+    skiplist.add(-3,21);
+    skiplist.add(12,21);
+    skiplist.add(12,21);
+    skiplist.add(12,21);
+    skiplist.add(13,21);
+    skiplist.add(13,21);
+    skiplist.add(13,21);
+    skiplist.printSkiplist();
     return 0;
 }
